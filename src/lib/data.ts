@@ -198,3 +198,89 @@ export function useAddWater(date = todayISO()) {
     onSuccess: () => invalidate(["water"]),
   });
 }
+
+export function useAddWeightLog() {
+  const invalidate = useInvalidate();
+  return useMutation({
+    mutationFn: async ({ userId, weight_kg, log_date }: { userId: string; weight_kg: number; log_date: string }) => {
+      const { error } = await supabase
+        .from("weight_logs")
+        .insert({ user_id: userId, weight_kg, log_date });
+      if (error) throw error;
+    },
+    onSuccess: () => invalidate(["weight_logs", "profile"]),
+  });
+}
+
+export function useUpdateProfile() {
+  const invalidate = useInvalidate();
+  return useMutation({
+    mutationFn: async ({ userId, data }: { userId: string; data: Partial<Profile> }) => {
+      const { error } = await supabase
+        .from("profiles")
+        .update(data)
+        .eq("id", userId);
+      if (error) throw error;
+    },
+    onSuccess: () => invalidate(["profile"]),
+  });
+}
+
+// ==========================================
+// Professional Panel Hooks
+// ==========================================
+
+export function useUserRole() {
+  const { userId } = useSessionUser();
+  return useQuery({
+    queryKey: ["user_role", userId],
+    queryFn: async () => {
+      if (!userId) return null;
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .single();
+      if (error && error.code !== "PGRST116") throw error; // ignore no rows
+      return data?.role ?? "client";
+    },
+    enabled: !!userId,
+  });
+}
+
+export function useProfessionalClients() {
+  const { userId } = useSessionUser();
+  return useQuery({
+    queryKey: ["professional_clients", userId],
+    queryFn: async () => {
+      if (!userId) return [];
+      // Fetch clients linked to this professional
+      const { data, error } = await supabase
+        .from("professional_clients")
+        .select("client_id, status, profiles(full_name, avatar_url, goal_weight_kg)")
+        .eq("professional_id", userId);
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!userId,
+  });
+}
+
+export function useClientLogs(clientId: string | undefined) {
+  return useQuery({
+    queryKey: ["client_meal_logs", clientId],
+    queryFn: async () => {
+      if (!clientId) return [];
+      const { data, error } = await supabase
+        .from("meal_logs")
+        .select("*")
+        .eq("user_id", clientId)
+        .order("log_date", { ascending: false })
+        .order("logged_time", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!clientId,
+  });
+}

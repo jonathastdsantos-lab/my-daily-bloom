@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -41,6 +42,7 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isProfessional, setIsProfessional] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -73,12 +75,15 @@ function AuthPage() {
           password: parsedPassword,
           options: {
             emailRedirectTo: `${window.location.origin}/hoje`,
-            data: { full_name: name.trim().slice(0, 120) },
+            data: { 
+              full_name: name.trim().slice(0, 120),
+              requested_role: isProfessional ? 'professional' : 'client'
+            },
           },
         });
         if (error) throw error;
         toast.success("Conta criada! Se pedirmos confirmação, verifique seu e-mail.");
-        navigate({ to: "/hoje" });
+        navigate({ to: isProfessional ? "/pro" : "/hoje" });
         return;
       }
 
@@ -155,16 +160,28 @@ function AuthPage() {
 
           <form onSubmit={submit} className="mt-6 space-y-4">
             {mode === "signup" ? (
-              <div className="space-y-2">
-                <Label htmlFor="name">Como podemos te chamar?</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  maxLength={120}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="Seu nome"
-                  required
-                />
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Como podemos te chamar?</Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    maxLength={120}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Seu nome"
+                    required
+                  />
+                </div>
+                <div className="flex items-center space-x-2 rounded-lg border p-3">
+                  <Checkbox 
+                    id="isProfessional" 
+                    checked={isProfessional} 
+                    onCheckedChange={(checked) => setIsProfessional(checked === true)} 
+                  />
+                  <Label htmlFor="isProfessional" className="text-sm font-normal cursor-pointer">
+                    Sou Nutricionista / Profissional de Saúde
+                  </Label>
+                </div>
               </div>
             ) : null}
 

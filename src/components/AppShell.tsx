@@ -1,17 +1,27 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, CalendarHeart, Home, Lightbulb, LineChart, Plus, User } from "lucide-react";
+import { BookOpen, CalendarHeart, Home, Lightbulb, LineChart, Plus, User, Users } from "lucide-react";
 import type { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { useProfile } from "@/lib/data";
+import { useProfile, useUserRole } from "@/lib/data";
 import { initials } from "@/lib/rotina";
 
-const NAV = [
+const CLIENT_NAV = [
   { to: "/hoje", label: "Hoje", icon: Home },
   { to: "/diario", label: "Diário", icon: BookOpen },
   { to: "/evolucao", label: "Evolução", icon: LineChart },
   { to: "/dicas", label: "Dicas", icon: Lightbulb },
+  { to: "/perfil", label: "Perfil", icon: User },
+] as const;
+
+const CLIENT_DESKTOP_EXTRA = [
+  { to: "/semana", label: "Minha semana", icon: CalendarHeart },
+  { to: "/dificuldades", label: "Dificuldades", icon: Lightbulb },
+] as const;
+
+const PRO_NAV = [
+  { to: "/pro", label: "Pacientes", icon: Users },
   { to: "/perfil", label: "Perfil", icon: User },
 ] as const;
 
@@ -29,8 +39,13 @@ export function AppShell({
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { data: profile } = useProfile();
+  const { data: role } = useUserRole();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const isPro = role === "professional";
+  const nav = isPro ? PRO_NAV : CLIENT_NAV;
+  const desktopExtra = isPro ? [] : CLIENT_DESKTOP_EXTRA;
 
   const goRegister = () => {
     if (onRegisterMeal) onRegisterMeal();
@@ -47,8 +62,8 @@ export function AppShell({
             </span>
             <span className="font-display text-lg font-semibold">rotina</span>
           </Link>
-          {[...NAV, ...DESKTOP_EXTRA].map((item) => {
-            const active = pathname === item.to;
+          {[...nav, ...desktopExtra].map((item) => {
+            const active = pathname === item.to || pathname.startsWith(item.to + "/");
             return (
               <Link
                 key={item.to}
@@ -64,11 +79,13 @@ export function AppShell({
               </Link>
             );
           })}
-          <div className="mt-6">
-            <Button className="w-full gap-2" onClick={goRegister}>
-              <Plus className="size-4" aria-hidden /> Registrar refeição
-            </Button>
-          </div>
+          {!isPro && (
+            <div className="mt-6">
+              <Button className="w-full gap-2" onClick={goRegister}>
+                <Plus className="size-4" aria-hidden /> Registrar refeição
+              </Button>
+            </div>
+          )}
           <div className="mt-auto flex items-center gap-3 rounded-xl px-3 py-2">
             <span className="grid size-9 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
               {initials(profile?.display_name ?? profile?.full_name)}
@@ -86,9 +103,9 @@ export function AppShell({
         aria-label="Navegação principal"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:hidden"
       >
-        <div className="mx-auto grid max-w-md grid-cols-6 items-end px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2">
-          {NAV.map((item, index) => {
-            const active = pathname === item.to;
+        <div className={`mx-auto grid max-w-md items-end px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 ${isPro ? "grid-cols-2" : "grid-cols-6"}`}>
+          {nav.map((item, index) => {
+            const active = pathname === item.to || pathname.startsWith(item.to + "/");
             const link = (
               <Link
                 key={item.to}
@@ -98,26 +115,25 @@ export function AppShell({
                 }`}
               >
                 <item.icon className="size-5" aria-hidden />
-                {item.label}
+                <span className="font-medium">{item.label}</span>
               </Link>
             );
-            if (index !== 2) return link;
-            return (
-              <div key="fab-group" className="contents">
-                <div className="flex flex-col items-center">
+
+            if (!isPro && index === 2) {
+              return (
+                <div key="fab" className="col-span-2 flex justify-center px-2">
                   <button
                     type="button"
                     onClick={goRegister}
+                    className="relative -top-4 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform active:scale-95"
                     aria-label="Registrar refeição"
-                    className="-mt-8 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift transition-transform active:scale-95"
                   >
                     <Plus className="size-6" aria-hidden />
                   </button>
-                  <span className="mt-1 text-[10px] text-muted-foreground">Registrar</span>
                 </div>
-                {link}
-              </div>
-            );
+              );
+            }
+            return <div key={item.to} className={!isPro && index > 2 ? "col-span-1" : ""}>{link}</div>;
           })}
         </div>
       </nav>
