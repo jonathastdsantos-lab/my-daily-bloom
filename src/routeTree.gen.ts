@@ -10,33 +10,168 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedDiarioRouteImport } from './routes/_authenticated/diario'
+import { Route as AuthenticatedDicasRouteImport } from './routes/_authenticated/dicas'
+import { Route as AuthenticatedDificuldadesRouteImport } from './routes/_authenticated/dificuldades'
+import { Route as AuthenticatedEvolucaoRouteImport } from './routes/_authenticated/evolucao'
+import { Route as AuthenticatedHojeRouteImport } from './routes/_authenticated/hoje'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedSemanaRouteImport } from './routes/_authenticated/semana'
+import { Route as AuthenticatedProIndexRouteImport } from './routes/_authenticated/pro/index'
+import { Route as AuthenticatedProClientClientIdRouteImport } from './routes/_authenticated/pro/client.$clientId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDiarioRoute = AuthenticatedDiarioRouteImport.update({
+  id: '/diario',
+  path: '/diario',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDicasRoute = AuthenticatedDicasRouteImport.update({
+  id: '/dicas',
+  path: '/dicas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDificuldadesRoute =
+  AuthenticatedDificuldadesRouteImport.update({
+    id: '/dificuldades',
+    path: '/dificuldades',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEvolucaoRoute = AuthenticatedEvolucaoRouteImport.update({
+  id: '/evolucao',
+  path: '/evolucao',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHojeRoute = AuthenticatedHojeRouteImport.update({
+  id: '/hoje',
+  path: '/hoje',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSemanaRoute = AuthenticatedSemanaRouteImport.update({
+  id: '/semana',
+  path: '/semana',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProIndexRoute = AuthenticatedProIndexRouteImport.update({
+  id: '/pro/',
+  path: '/pro/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProClientClientIdRoute =
+  AuthenticatedProClientClientIdRouteImport.update({
+    id: '/pro/client/$clientId',
+    path: '/pro/client/$clientId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/diario': typeof AuthenticatedDiarioRoute
+  '/dicas': typeof AuthenticatedDicasRoute
+  '/dificuldades': typeof AuthenticatedDificuldadesRoute
+  '/evolucao': typeof AuthenticatedEvolucaoRoute
+  '/hoje': typeof AuthenticatedHojeRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/semana': typeof AuthenticatedSemanaRoute
+  '/pro/': typeof AuthenticatedProIndexRoute
+  '/pro/client/$clientId': typeof AuthenticatedProClientClientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/diario': typeof AuthenticatedDiarioRoute
+  '/dicas': typeof AuthenticatedDicasRoute
+  '/dificuldades': typeof AuthenticatedDificuldadesRoute
+  '/evolucao': typeof AuthenticatedEvolucaoRoute
+  '/hoje': typeof AuthenticatedHojeRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/semana': typeof AuthenticatedSemanaRoute
+  '/pro': typeof AuthenticatedProIndexRoute
+  '/pro/client/$clientId': typeof AuthenticatedProClientClientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/diario': typeof AuthenticatedDiarioRoute
+  '/_authenticated/dicas': typeof AuthenticatedDicasRoute
+  '/_authenticated/dificuldades': typeof AuthenticatedDificuldadesRoute
+  '/_authenticated/evolucao': typeof AuthenticatedEvolucaoRoute
+  '/_authenticated/hoje': typeof AuthenticatedHojeRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/semana': typeof AuthenticatedSemanaRoute
+  '/_authenticated/pro/': typeof AuthenticatedProIndexRoute
+  '/_authenticated/pro/client/$clientId': typeof AuthenticatedProClientClientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/diario'
+    | '/dicas'
+    | '/dificuldades'
+    | '/evolucao'
+    | '/hoje'
+    | '/perfil'
+    | '/semana'
+    | '/pro/'
+    | '/pro/client/$clientId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/diario'
+    | '/dicas'
+    | '/dificuldades'
+    | '/evolucao'
+    | '/hoje'
+    | '/perfil'
+    | '/semana'
+    | '/pro'
+    | '/pro/client/$clientId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/diario'
+    | '/_authenticated/dicas'
+    | '/_authenticated/dificuldades'
+    | '/_authenticated/evolucao'
+    | '/_authenticated/hoje'
+    | '/_authenticated/perfil'
+    | '/_authenticated/semana'
+    | '/_authenticated/pro/'
+    | '/_authenticated/pro/client/$clientId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +183,117 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/diario': {
+      id: '/_authenticated/diario'
+      path: '/diario'
+      fullPath: '/diario'
+      preLoaderRoute: typeof AuthenticatedDiarioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dicas': {
+      id: '/_authenticated/dicas'
+      path: '/dicas'
+      fullPath: '/dicas'
+      preLoaderRoute: typeof AuthenticatedDicasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dificuldades': {
+      id: '/_authenticated/dificuldades'
+      path: '/dificuldades'
+      fullPath: '/dificuldades'
+      preLoaderRoute: typeof AuthenticatedDificuldadesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/evolucao': {
+      id: '/_authenticated/evolucao'
+      path: '/evolucao'
+      fullPath: '/evolucao'
+      preLoaderRoute: typeof AuthenticatedEvolucaoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/hoje': {
+      id: '/_authenticated/hoje'
+      path: '/hoje'
+      fullPath: '/hoje'
+      preLoaderRoute: typeof AuthenticatedHojeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/semana': {
+      id: '/_authenticated/semana'
+      path: '/semana'
+      fullPath: '/semana'
+      preLoaderRoute: typeof AuthenticatedSemanaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pro/': {
+      id: '/_authenticated/pro/'
+      path: '/pro'
+      fullPath: '/pro/'
+      preLoaderRoute: typeof AuthenticatedProIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pro/client/$clientId': {
+      id: '/_authenticated/pro/client/$clientId'
+      path: '/pro/client/$clientId'
+      fullPath: '/pro/client/$clientId'
+      preLoaderRoute: typeof AuthenticatedProClientClientIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDiarioRoute: typeof AuthenticatedDiarioRoute
+  AuthenticatedDicasRoute: typeof AuthenticatedDicasRoute
+  AuthenticatedDificuldadesRoute: typeof AuthenticatedDificuldadesRoute
+  AuthenticatedEvolucaoRoute: typeof AuthenticatedEvolucaoRoute
+  AuthenticatedHojeRoute: typeof AuthenticatedHojeRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedSemanaRoute: typeof AuthenticatedSemanaRoute
+  AuthenticatedProIndexRoute: typeof AuthenticatedProIndexRoute
+  AuthenticatedProClientClientIdRoute: typeof AuthenticatedProClientClientIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDiarioRoute: AuthenticatedDiarioRoute,
+  AuthenticatedDicasRoute: AuthenticatedDicasRoute,
+  AuthenticatedDificuldadesRoute: AuthenticatedDificuldadesRoute,
+  AuthenticatedEvolucaoRoute: AuthenticatedEvolucaoRoute,
+  AuthenticatedHojeRoute: AuthenticatedHojeRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedSemanaRoute: AuthenticatedSemanaRoute,
+  AuthenticatedProIndexRoute: AuthenticatedProIndexRoute,
+  AuthenticatedProClientClientIdRoute: AuthenticatedProClientClientIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
