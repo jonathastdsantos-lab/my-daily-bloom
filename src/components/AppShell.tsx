@@ -34,7 +34,7 @@ export function AppShell({
 
   const goRegister = () => {
     if (onRegisterMeal) onRegisterMeal();
-    else navigate({ to: "/hoje", search: { registrar: true } });
+    else navigate({ to: "/hoje" });
   };
 
   return (
