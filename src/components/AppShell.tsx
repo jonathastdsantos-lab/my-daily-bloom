@@ -86,12 +86,25 @@ export function AppShell({
         aria-label="Navegação principal"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:hidden"
       >
-        <div className="mx-auto grid max-w-md grid-cols-5 items-end px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2">
+        <div className="mx-auto grid max-w-md grid-cols-6 items-end px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2">
           {NAV.map((item, index) => {
             const active = pathname === item.to;
-            if (index === 2) {
-              return (
-                <div key="fab" className="flex flex-col items-center">
+            const link = (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`flex flex-col items-center gap-1 rounded-lg py-1 text-[11px] transition-colors ${
+                  active ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                <item.icon className="size-5" aria-hidden />
+                {item.label}
+              </Link>
+            );
+            if (index !== 2) return link;
+            return (
+              <div key="fab-group" className="contents">
+                <div className="flex flex-col items-center">
                   <button
                     type="button"
                     onClick={goRegister}
@@ -102,31 +115,10 @@ export function AppShell({
                   </button>
                   <span className="mt-1 text-[10px] text-muted-foreground">Registrar</span>
                 </div>
-              );
-            }
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => queryClient.invalidateQueries()}
-                className={`flex flex-col items-center gap-1 rounded-lg py-1 text-[11px] transition-colors ${
-                  active ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <item.icon className="size-5" aria-hidden />
-                {item.label}
-              </Link>
+                {link}
+              </div>
             );
           })}
-          <Link
-            to="/evolucao"
-            className={`flex flex-col items-center gap-1 rounded-lg py-1 text-[11px] transition-colors ${
-              pathname === "/evolucao" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            <LineChart className="size-5" aria-hidden />
-            Evolução
-          </Link>
         </div>
       </nav>
     </div>
