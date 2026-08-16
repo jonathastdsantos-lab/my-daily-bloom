@@ -84,3 +84,12 @@ export function initials(name?: string | null) {
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("");
 }
+
+export function groupLogsByDate<T extends { log_date: string }>(logs: T[]): Record<string, T[]> {
+  return logs.reduce((acc, log) => {
+    const date = log.log_date;
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(log);
+    return acc;
+  }, {} as Record<string, T[]>);
+}
