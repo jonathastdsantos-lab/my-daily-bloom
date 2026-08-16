@@ -51,7 +51,8 @@ function ProfessionalDashboard() {
               return (
                 <Link
                   key={pc.client_id}
-                  to={`/pro/client/${pc.client_id}`}
+                  to="/pro/client/$clientId"
+                  params={{ clientId: pc.client_id }}
                   className="group flex items-center gap-4 rounded-2xl border bg-card p-4 transition-all hover:border-primary hover:shadow-sm"
                 >
                   <div className="grid size-12 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground font-medium">

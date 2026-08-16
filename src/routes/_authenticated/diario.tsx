@@ -8,7 +8,7 @@ import { AppShell, DemoNotice, PageHeader } from "@/components/AppShell";
 import { MealCard } from "@/components/MealCard";
 import { useMealLogs, useSessionUser } from "@/lib/data";
 import { demoMeals } from "@/lib/demo";
-import { shiftDays, todayISO } from "@/lib/rotina";
+import { groupLogsByDate, shiftDays, todayISO } from "@/lib/rotina";
 
 export const Route = createFileRoute("/_authenticated/diario")({
   head: () => ({
@@ -41,11 +41,7 @@ function DiarioPage() {
     ).sort((a, b) => b.log_date.localeCompare(a.log_date) || b.logged_time.localeCompare(a.logged_time));
   }, [logs, isDemo, from, to]);
 
-  const grouped = displayLogs.reduce((acc, log) => {
-    if (!acc[log.log_date]) acc[log.log_date] = [];
-    acc[log.log_date].push(log);
-    return acc;
-  }, {} as Record<string, typeof displayLogs>);
+  const grouped = useMemo(() => groupLogsByDate(displayLogs), [displayLogs]);
 
   const dates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
 
@@ -96,8 +92,8 @@ function DiarioPage() {
                   {formatHeaderDate(date)}
                 </h3>
                 <div className="grid gap-4 lg:grid-cols-2">
-                  {grouped[date].map((log) => (
-                      <MealCard key={log.id} log={log} />
+                  {(grouped[date] ?? []).map((log) => (
+                    <MealCard key={log.id} log={log} />
                   ))}
                 </div>
               </section>
