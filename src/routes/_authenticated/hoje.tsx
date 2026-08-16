@@ -15,6 +15,7 @@ import {
   useSessionUser,
   useWaterToday,
   useWeightLogs,
+  type MealLog,
 } from "@/lib/data";
 import { demoMeals, demoWater } from "@/lib/demo";
 import { formatLongDate, greeting, hhmm, nowTime, todayISO } from "@/lib/rotina";

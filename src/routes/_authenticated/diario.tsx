@@ -6,8 +6,8 @@ import { useMemo, useState } from "react";
 
 import { AppShell, DemoNotice, PageHeader } from "@/components/AppShell";
 import { MealCard } from "@/components/MealCard";
-import { useMealLogs, useSessionUser } from "@/lib/data";
-import { demoMeals } from "@/lib/demo";
+import { useMealLogs, useSessionUser, type MealLog } from "@/lib/data";
+import { demoMeals, type DemoMeal } from "@/lib/demo";
 import { groupLogsByDate, shiftDays, todayISO } from "@/lib/rotina";
 
 export const Route = createFileRoute("/_authenticated/diario")({
@@ -34,11 +34,11 @@ function DiarioPage() {
 
   const isDemo = !userId || logs.length === 0;
   
-  const displayLogs = useMemo(() => {
+  const displayLogs: (MealLog | DemoMeal)[] = useMemo(() => {
     if (!isDemo) return logs;
-    return demoMeals.filter(
-      (m) => m.log_date >= from && m.log_date <= to
-    ).sort((a, b) => b.log_date.localeCompare(a.log_date) || b.logged_time.localeCompare(a.logged_time));
+    return demoMeals
+      .filter((m) => m.log_date >= from && m.log_date <= to)
+      .sort((a, b) => b.log_date.localeCompare(a.log_date) || b.logged_time.localeCompare(a.logged_time));
   }, [logs, isDemo, from, to]);
 
   const grouped = useMemo(() => groupLogsByDate(displayLogs), [displayLogs]);
