@@ -56,7 +56,7 @@ function ClientDiary() {
                     {format(parsedDate, "EEEE, d 'de' MMMM", { locale: ptBR })}
                   </h3>
                   <div className="space-y-3">
-                    {dayLogs.map((log) => (
+                    {(dayLogs ?? []).map((log) => (
                       <MealCard key={log.id} log={log} />
                     ))}
                   </div>

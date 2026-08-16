@@ -254,14 +254,30 @@ export function useProfessionalClients() {
     queryKey: ["professional_clients", userId],
     queryFn: async () => {
       if (!userId) return [];
-      // Fetch clients linked to this professional
-      const { data, error } = await supabase
+      // Fetch links first, then profiles in a second query to avoid relying on
+      // the missing FK relationship in the generated Supabase types.
+      const { data: links, error: linksError } = await supabase
         .from("professional_clients")
-        .select("client_id, status, profiles(full_name, avatar_url, goal_weight_kg)")
+        .select("client_id, status")
         .eq("professional_id", userId);
-      
-      if (error) throw error;
-      return data;
+
+      if (linksError) throw linksError;
+      if (!links || links.length === 0) return [];
+
+      const clientIds = links.map((l) => l.client_id);
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, avatar_url, goal_weight_kg")
+        .in("id", clientIds);
+
+      if (profilesError) throw profilesError;
+
+      const profileMap = new Map(profiles?.map((p) => [p.id, p]) ?? []);
+      return links.map((link) => ({
+        client_id: link.client_id,
+        status: link.status,
+        profiles: profileMap.get(link.client_id) ?? null,
+      }));
     },
     enabled: !!userId,
   });

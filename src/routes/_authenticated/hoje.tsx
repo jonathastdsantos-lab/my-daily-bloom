@@ -15,6 +15,7 @@ import {
   useSessionUser,
   useWaterToday,
   useWeightLogs,
+  type MealLog,
 } from "@/lib/data";
 import { demoMeals, demoWater } from "@/lib/demo";
 import { formatLongDate, greeting, hhmm, nowTime, todayISO } from "@/lib/rotina";
@@ -95,9 +96,12 @@ function TodayPage() {
 
   const timeline = schedules.length
     ? schedules.map((schedule) => {
-        const log = (isDemo ? demoToday : logs).find((item) =>
-          isDemo ? item.meal_name === schedule.name : item.schedule_id === schedule.id,
-        );
+        let log: (typeof demoToday)[number] | MealLog | undefined;
+        if (isDemo) {
+          log = demoToday.find((item) => item.meal_name === schedule.name);
+        } else {
+          log = logs.find((item) => item.schedule_id === schedule.id);
+        }
         return {
           id: schedule.id,
           name: schedule.name,
