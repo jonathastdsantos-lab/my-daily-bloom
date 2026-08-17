@@ -58,11 +58,8 @@ function Landing() {
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 lg:px-8">
-        <span className="flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="grid size-9 place-items-center rounded-2xl bg-primary text-primary-foreground">
-            r
-          </span>
-          rotina
+        <span className="flex items-center gap-2">
+          <img src="/logo.png" alt="Rotina Logo" className="h-12 w-auto object-contain" />
         </span>
         <Link
           to="/auth"

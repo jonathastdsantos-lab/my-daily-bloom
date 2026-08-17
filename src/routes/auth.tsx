@@ -121,7 +121,7 @@ function AuthPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hero-gradient hidden flex-col justify-between p-12 lg:flex">
-        <span className="font-display text-xl font-semibold">rotina</span>
+        <img src="/logo.png" alt="Rotina Logo" className="h-24 w-auto object-contain self-start" />
         <div className="max-w-sm">
           <h1 className="text-4xl leading-tight">Sua rotina alimentar, registrada com leveza.</h1>
           <p className="mt-4 text-sm text-muted-foreground">

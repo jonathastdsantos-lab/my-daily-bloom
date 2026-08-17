@@ -56,11 +56,8 @@ export function AppShell({
     <div className="min-h-screen bg-background">
       <div className="mx-auto flex w-full max-w-6xl">
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col gap-1 border-r border-border px-4 py-8 lg:flex">
-          <Link to="/hoje" className="mb-6 flex items-center gap-3 px-2">
-            <span className="grid size-10 place-items-center rounded-2xl bg-primary text-lg font-semibold text-primary-foreground">
-              r
-            </span>
-            <span className="font-display text-lg font-semibold">rotina</span>
+          <Link to="/hoje" className="mb-6 flex items-center px-2">
+            <img src="/logo.png" alt="Rotina" className="h-16 w-auto object-contain" />
           </Link>
           {[...nav, ...desktopExtra].map((item) => {
             const active = pathname === item.to || pathname.startsWith(item.to + "/");
